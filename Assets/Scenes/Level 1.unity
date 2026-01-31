@@ -256,7 +256,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!212 &2009782579
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -339,6 +339,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f996495fbba2f747a25414fad7a92ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  acceleration: 5
+  steeringSpeed: 200
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
