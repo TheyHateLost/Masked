@@ -2,13 +2,16 @@ using UnityEngine;
 
 public class MovementController : MonoBehaviour
 {
-    public float acceleration = 10f;
-    public float brakingForce = 25f; // Braking is usually faster than accelerating
-    public float maxSpeed = 20f;
-    public float coastingFriction = 1.5f; // How fast you slow down when not pressing anything
-    public float steeringSpeed = 180f;
+    [Header("Movement Settings")]
+    public float sideSpeed = 15f;
+    public float screenLimit = 8f; // How far left/right the player can go
 
-    private float currentSpeed = 0f;
+    [Header("Tilt Settings")]
+    public float maxTiltAngle = 30f; // Maximum rotation degree
+    public float tiltSpeed = 150f;
+    public float tiltReturnSpeed = 5f; // How fast it centers back
+
+    private float currentTilt = 0f;
     private Rigidbody2D rb;
 
     void Start()
@@ -16,48 +19,35 @@ public class MovementController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
     }
 
-    public bool hasPowerUp;
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.CompareTag("PowerUp"))
-        {
-            hasPowerUp = true;
-            Destroy(other.gameObject);
-            // You can add more logic here for power-up effects
-        }
-    }
-
-
     void Update()
     {
-        // 1. Acceleration (W)
-        if (Input.GetKey(KeyCode.W))
+        float steerInput = Input.GetAxis("Horizontal"); // A/D or Left/Right
+
+        // 1. HANDLE ROTATION (The Tilt)
+        if (steerInput != 0)
         {
-            currentSpeed += acceleration * Time.deltaTime;
+            // Tilt based on input
+            currentTilt -= steerInput * tiltSpeed * Time.deltaTime;
         }
-        // 2. Braking (S) - Only works if moving
-        else if (Input.GetKey(KeyCode.S) && currentSpeed > 0)
-        {
-            currentSpeed -= brakingForce * Time.deltaTime;
-        }
-        // 3. Natural Coasting
         else
         {
-            currentSpeed = Mathf.MoveTowards(currentSpeed, 0, coastingFriction * Time.deltaTime);
+            // Smoothly return to 0 when no key is pressed
+            currentTilt = Mathf.Lerp(currentTilt, 0, Time.deltaTime * tiltReturnSpeed);
         }
 
-        // CLAMP: Min is 0 so no reversing, Max is your top speed
-        currentSpeed = Mathf.Clamp(currentSpeed, 0, maxSpeed);
+        // CLAMP: This is where the magic happens
+        currentTilt = Mathf.Clamp(currentTilt, -maxTiltAngle, maxTiltAngle);
 
-        // Steering Logic
-        float steerInput = Input.GetAxis("Horizontal");
-        transform.Rotate(0, 0, -steerInput * steeringSpeed * Time.deltaTime);
-    }
+        // Apply tilt
+        transform.localRotation = Quaternion.Euler(0, 0, currentTilt);
 
+        // 2. HANDLE POSITION (Side-to-Side)
+        float horizontalMove = steerInput * sideSpeed * Time.deltaTime;
+        Vector3 newPosition = transform.position + new Vector3(horizontalMove, 0, 0);
 
-    void FixedUpdate()
-    {
-        // Move forward relative to current rotation
-        rb.linearVelocity = transform.up * currentSpeed;
+        // Optional: Keep player within screen bounds
+        newPosition.x = Mathf.Clamp(newPosition.x, -screenLimit, screenLimit);
+
+        transform.position = newPosition;
     }
 }
