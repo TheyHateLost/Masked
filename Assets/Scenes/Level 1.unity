@@ -864,11 +864,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f996495fbba2f747a25414fad7a92ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  acceleration: 5
-  brakingForce: 25
-  maxSpeed: 20
-  coastingFriction: 1.5
-  steeringSpeed: 200
+  sideSpeed: 15
+  screenLimit: 8
+  maxTiltAngle: 30
+  tiltSpeed: 150
+  tiltReturnSpeed: 5
   _animator: {fileID: 0}
   hasPowerUp: 0
 --- !u!50 &925671809
@@ -2530,11 +2530,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f996495fbba2f747a25414fad7a92ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  acceleration: 5
-  brakingForce: 25
-  maxSpeed: 20
-  coastingFriction: 1.5
-  steeringSpeed: 200
+  sideSpeed: 15
+  screenLimit: 8
+  maxTiltAngle: 35
+  tiltSpeed: 150
+  tiltReturnSpeed: 5
   _animator: {fileID: 2009782584}
   hasPowerUp: 0
 --- !u!61 &2009782582
