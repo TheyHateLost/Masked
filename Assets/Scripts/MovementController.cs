@@ -2,8 +2,13 @@ using UnityEngine;
 
 public class MovementController : MonoBehaviour
 {
-    public float acceleration = 5f;
-    public float steeringSpeed = 200f;
+    public float acceleration = 10f;
+    public float brakingForce = 25f; // Braking is usually faster than accelerating
+    public float maxSpeed = 20f;
+    public float coastingFriction = 1.5f; // How fast you slow down when not pressing anything
+    public float steeringSpeed = 180f;
+
+    private float currentSpeed = 0f;
     private Rigidbody2D rb;
 
     void Start()
@@ -11,20 +16,35 @@ public class MovementController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
     }
 
+    void Update()
+    {
+        // 1. Acceleration (W)
+        if (Input.GetKey(KeyCode.W))
+        {
+            currentSpeed += acceleration * Time.deltaTime;
+        }
+        // 2. Braking (S) - Only works if moving
+        else if (Input.GetKey(KeyCode.S) && currentSpeed > 0)
+        {
+            currentSpeed -= brakingForce * Time.deltaTime;
+        }
+        // 3. Natural Coasting
+        else
+        {
+            currentSpeed = Mathf.MoveTowards(currentSpeed, 0, coastingFriction * Time.deltaTime);
+        }
+
+        // CLAMP: Min is 0 so no reversing, Max is your top speed
+        currentSpeed = Mathf.Clamp(currentSpeed, 0, maxSpeed);
+
+        // Steering Logic
+        float steerInput = Input.GetAxis("Horizontal");
+        transform.Rotate(0, 0, -steerInput * steeringSpeed * Time.deltaTime);
+    }
+
     void FixedUpdate()
     {
-        // Get Input
-        float moveInput = Input.GetAxis("Vertical");
-        float steerInput = Input.GetAxis("Horizontal");
-
-        // Forward Movement: Apply force or move position relative to car's rotation
-        rb.linearVelocity = transform.up * moveInput * acceleration;
-
-        // Steering: Rotate the car based on horizontal input
-        if (moveInput != 0)
-        { // Only steer if moving
-            float rotationAmount = -steerInput * steeringSpeed * Time.fixedDeltaTime;
-            rb.MoveRotation(rb.rotation + rotationAmount);
-        }
+        // Move forward relative to current rotation
+        rb.linearVelocity = transform.up * currentSpeed;
     }
 }
