@@ -16,6 +16,18 @@ public class MovementController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
     }
 
+    public bool hasPowerUp;
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("PowerUp"))
+        {
+            hasPowerUp = true;
+            Destroy(other.gameObject);
+            // You can add more logic here for power-up effects
+        }
+    }
+
+
     void Update()
     {
         // 1. Acceleration (W)
@@ -41,6 +53,7 @@ public class MovementController : MonoBehaviour
         float steerInput = Input.GetAxis("Horizontal");
         transform.Rotate(0, 0, -steerInput * steeringSpeed * Time.deltaTime);
     }
+
 
     void FixedUpdate()
     {
