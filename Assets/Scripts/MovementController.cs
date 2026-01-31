@@ -82,7 +82,7 @@ public class MovementController : MonoBehaviour
             _animator.SetBool("isTurnLeft", false);
             _animator.SetBool("isTurnR", false);
         }
-        if (steerInput < 0)
+        if (steerInput < 1)
         {
             _animator.SetBool("isTurnLeft", true);
             _animator.SetBool("isTurnR", false);
