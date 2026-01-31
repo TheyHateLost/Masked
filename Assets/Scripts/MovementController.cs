@@ -7,17 +7,17 @@ public class MovementController : MonoBehaviour
     public float sideSpeed = 15f;
     public float screenLimit = 8f; // How far left/right the player can go
 
-<<<<<<< Updated upstream
+
     [Header("Tilt Settings")]
     public float maxTiltAngle = 30f; // Maximum rotation degree
     public float tiltSpeed = 150f;
     public float tiltReturnSpeed = 5f; // How fast it centers back
 
     private float currentTilt = 0f;
-=======
+
     [SerializeField] private Animator _animator;
     private float currentSpeed = 0f;
->>>>>>> Stashed changes
+
     private Rigidbody2D rb;
 
     void Start()
@@ -25,9 +25,10 @@ public class MovementController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
     }
 
-<<<<<<< Updated upstream
-=======
+
     public bool hasPowerUp;
+    private float steeringSpeed;
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("PowerUp"))
@@ -38,7 +39,7 @@ public class MovementController : MonoBehaviour
         }
     }
 
->>>>>>> Stashed changes
+
     void Update()
     {
         float steerInput = Input.GetAxis("Horizontal"); // A/D or Left/Right
@@ -58,16 +59,14 @@ public class MovementController : MonoBehaviour
         // CLAMP: This is where the magic happens
         currentTilt = Mathf.Clamp(currentTilt, -maxTiltAngle, maxTiltAngle);
 
-<<<<<<< Updated upstream
         // Apply tilt
         transform.localRotation = Quaternion.Euler(0, 0, currentTilt);
 
         // 2. HANDLE POSITION (Side-to-Side)
         float horizontalMove = steerInput * sideSpeed * Time.deltaTime;
         Vector3 newPosition = transform.position + new Vector3(horizontalMove, 0, 0);
-=======
+
         // Steering Logic
-        float steerInput = Input.GetAxis("Horizontal");
         transform.Rotate(0, 0, -steerInput * steeringSpeed * Time.deltaTime);
 
         // Optional: Add some visual feedback for steering, like tilting the sprite
@@ -94,8 +93,6 @@ public class MovementController : MonoBehaviour
             _animator.SetBool("isTurnLeft", false);
 
         }
-    }
->>>>>>> Stashed changes
 
         // Optional: Keep player within screen bounds
         newPosition.x = Mathf.Clamp(newPosition.x, -screenLimit, screenLimit);
