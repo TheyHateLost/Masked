@@ -3,61 +3,73 @@ using UnityEngine;
 
 public class TargetAI : MonoBehaviour
 {
-    public Vector3 targetLocation = Vector3.zero;
-    public float speed = 5;
+    public float MaxSpeed;
+    private float Speed;
 
-    public float length;
-    public float radius;
-    public int numOfRays;
-    public LayerMask sightLayer;
+    private Collider[] hitColliders;
+    private RaycastHit Hit;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-   
+    public float SightRange;
+    public float DetectionRange;
+
+    public Rigidbody rB;
+    public GameObject Target;
+
+    private bool seePlayer;
+
+
+
+    // Start is called before the first frame update
     void Start()
     {
-
+        Speed = MaxSpeed;
     }
 
     // Update is called once per frame
     void Update()
     {
-        Vector3 directionToTarget = targetLocation - transform.position;
-        transform.position += directionToTarget.normalized * speed * Time.deltaTime;
-        CheckRay();
-    }
+        //detect any players in range
 
-    public void SetInsensity(float value)
-    {
-        length = value * 5 + 10;
-        numOfRays = Mathf.FloorToInt(value * 10f) + 10;
-        radius = value * 30 + 45;
-    }
-
-    public List<GameObject> CheckRay()
-    {
-        List<GameObject> foundObject = new List<GameObject>();
-
-        for (int i = 0; i < numOfRays; i++)
+        if (!seePlayer)
         {
-            float halfRadius = radius / 2;
-            float radiusFactor = radius / numOfRays;
-            Vector3 direction = Quaternion.Euler(0, -halfRadius + (radiusFactor * i), 0) * transform.forward;
-            Vector3 origin = transform.position;
-
-            Physics.Raycast(origin, direction, out RaycastHit hit, length, sightLayer);
-            Debug.DrawLine(origin, origin + direction * length, Color.red);
-
-            if (hit.collider)
+            hitColliders = Physics.OverlapSphere(transform.position, DetectionRange);
+            foreach (var HitCollider in hitColliders)
             {
-                if (!foundObject.Contains(hit.collider.gameObject))
+
+                if (HitCollider.tag == "Player")
                 {
-                    foundObject.Add(hit.collider.gameObject);
+                    Target = HitCollider.gameObject;
+                    seePlayer = true;
                 }
+
+            }
+
+        }
+        else
+        {
+            if (Physics.Raycast(transform.position, (Target.transform.position - transform.position), out Hit, SightRange))
+            {
+                if (Hit.collider.tag != "Player")
+                {
+                    seePlayer = false;
+                }
+                else
+                {
+                    //calculate the direction
+
+                    var Heading = Hit.transform.position - transform.position;
+                    var Distance = Heading.magnitude;
+                    var Direcation = Heading / Distance;
+
+                    Vector3 Move = new Vector3(Direcation.x * Speed, 0, Direcation.z * Speed);
+                    rB.linearVelocity = Move;
+                    transform.forward = Move;
+                }
+
             }
         }
-
-        return foundObject;
     }
-   
+
+
 }
 
