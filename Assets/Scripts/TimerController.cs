@@ -47,12 +47,4 @@ public class TimerController : MonoBehaviour
     {
         // Add logic here (e.g., stop the road moving, show a menu)
     }
-    public void AddTime(float amount)
-    {
-        timeRemaining += amount;
-        // Optional: Flash the text green to show time was added
-        timeText.color = Color.green;
-        Invoke("ResetColor", 0.5f);
-    }
 }
-
