@@ -72,9 +72,14 @@ public class MovementController : MonoBehaviour
         // Optional: Add some visual feedback for steering, like tilting the sprite
 
         // Animator logic: set "isMoving" based on currentSpeed
+        // Animator logic: set "isMoving" based on currentSpeed
         if (_animator != null)
         {
             _animator.SetBool("isTurnLeft", currentSpeed > 0.01f);
+        }
+        if (_animator != null)
+        {
+            _animator.SetBool("isTurnR", currentSpeed > 0.02f);
         }
 
         if (rb.linearVelocity.y == 0)
@@ -93,6 +98,7 @@ public class MovementController : MonoBehaviour
             _animator.SetBool("isTurnLeft", false);
 
         }
+       
 
         // Optional: Keep player within screen bounds
         newPosition.x = Mathf.Clamp(newPosition.x, -screenLimit, screenLimit);

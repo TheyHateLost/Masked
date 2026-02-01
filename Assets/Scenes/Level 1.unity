@@ -2118,8 +2118,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetLocation: {x: 0, y: 0, z: 0}
   speed: 5.35
-  length: 0
-  radius: 0
+  length: 1.01
+  radius: 1.08
   numOfRays: 1
   sightLayer:
     serializedVersion: 2
