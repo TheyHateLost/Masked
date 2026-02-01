@@ -6,8 +6,23 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/Main Menu.unity
+    guid: 365a82b6aed1eff48bf0888c710c700b
+  - enabled: 1
+    path: Assets/Scenes/CutScene.unity
+    guid: ef54acb5903d2ab41a27e5c4d21859a9
+  - enabled: 1
+    path: Assets/Scenes/CutScene 2.unity
+    guid: 058b7e0e6d7654542a10840a3fd87a57
+  - enabled: 1
+    path: Assets/Scenes/CutScene 3.unity
+    guid: 9361a480905339247b33a305b956af0f
+  - enabled: 1
     path: Assets/Scenes/Level 1.unity
     guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 1
+    path: Assets/Scenes/Game Over Scene.unity
+    guid: 5334bc284e8467b438287e507831f9b0
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 3590b91b4603b465dbb4216d601bff33, type: 3}
   m_UseUCBPForAssetBundles: 0
