@@ -1,18 +1,40 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class NewLobbyScene : MonoBehaviour
+public class Scenetrans : MonoBehaviour
 {
-    public string NewScene;
+    [Header("Configuration")]
+    [SerializeField] private string sceneToLoad;
+    [SerializeField] private string playerTag = "Player";
 
-    void OnTriggerEnter(Collider other)
+    // This handles "Triggers" (Player walks OVER the object)
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player"))
+        // Check if the object entering the trigger is the Player
+        if (other.CompareTag(playerTag))
         {
-            SceneManager.LoadScene(NewScene);
-            Debug.Log(NewScene);
+            LoadScene();
+        }
+    }
+
+    // This handles "Collisions" (Player bumps INTO a solid object)
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag(playerTag))
+        {
+            LoadScene();
+        }
+    }
+
+    private void LoadScene()
+    {
+        if (!string.IsNullOrEmpty(sceneToLoad))
+        {
+            SceneManager.LoadScene(sceneToLoad);
+        }
+        else
+        {
+            Debug.LogError("No scene name assigned to " + gameObject.name);
         }
     }
 }
